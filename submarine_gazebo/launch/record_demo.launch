@@ -1,0 +1,53 @@
+<launch>
+  <arg name="record" default="false"/>
+  <arg name="bag_filename" default="recording.bag"/>
+  <arg name="use_ned_frame" default="false"/>
+
+  <group if="$(arg record)">
+    <node pkg="rosbag" type="record" name="recording"
+      args="record -O $(arg bag_filename)
+        /submarine/dp_controller/trajectory
+        /submarine/dp_controller/reference
+        /submarine/pose_gt_ned
+        /submarine/dp_controller/error
+        /hydrodynamics/current_velocity
+        /submarine/wrench_perturbation
+        /submarine/control_allocation/control_input
+        /submarine/thrusters/0/thrust
+        /submarine/thrusters/0/input
+        /submarine/thrusters/1/thrust
+        /submarine/thrusters/1/input
+        /submarine/fins/0/input
+        /submarine/fins/1/input
+        /submarine/fins/2/input
+        /submarine/fins/3/input
+        /submarine/fins/0/output
+        /submarine/fins/1/output
+        /submarine/fins/2/output
+        /submarine/fins/3/output"
+      if="$(arg use_ned_frame)"/>
+
+      <node pkg="rosbag" type="record" name="recording"
+        args="record -O $(arg bag_filename)
+          /submarine/dp_controller/trajectory
+          /submarine/dp_controller/reference
+          /submarine/pose_gt
+          /submarine/dp_controller/error
+          /hydrodynamics/current_velocity
+          /submarine/wrench_perturbation
+          /submarine/control_allocation/control_input
+          /submarine/thrusters/0/thrust
+          /submarine/thrusters/0/input
+          /submarine/thrusters/1/thrust
+          /submarine/thrusters/1/input
+          /submarine/fins/0/input
+          /submarine/fins/1/input
+          /submarine/fins/2/input
+          /submarine/fins/3/input
+          /submarine/fins/0/output
+          /submarine/fins/1/output
+          /submarine/fins/2/output
+          /submarine/fins/3/output"
+        unless="$(arg use_ned_frame)"/>
+  </group>
+</launch>

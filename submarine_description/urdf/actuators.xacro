@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <!-- Adding the thruster units with the macro created in snippets.xacro -->
+    <!--
+    Important:
+        - The thruster IDs must be given as integers and must be unique to each thruster unit
+        - The thruster pose in the <origin> block is relative to the body's center of mass. Be
+          aware that Gazebo does not use the SNAME convention per default.
+    -->
+
+    <xacro:thruster_macro robot_namespace="${namespace}" thruster_id="0">
+        <origin xyz="-0.24407 0.119959 0.047072" rpy="0 0 0" />
+    </xacro:thruster_macro>
+
+    <xacro:thruster_macro robot_namespace="${namespace}" thruster_id="1">
+        <origin xyz="-0.24407 -0.120461 0.047072" rpy="0 0 0" />
+    </xacro:thruster_macro>
+
+    <!-- Instantiate fins, if necessary -->
+    <xacro:fin_macro namespace="${namespace}" fin_id="0" mesh_filename="${left_fin_back_mesh_file}">
+      <origin xyz="-0.692273 0.114625 -0.027349" rpy="${-0.5 * pi} 0 0" />
+    </xacro:fin_macro>
+
+    <xacro:fin_macro namespace="${namespace}" fin_id="1" mesh_filename="${right_fin_back_mesh_file}">
+      <origin xyz="-0.69188 -0.110245 -0.0303" rpy="${-0.5 * pi} 0 0" />
+    </xacro:fin_macro>
+
+
+    <xacro:fin_macro namespace="${namespace}" fin_id="3" mesh_filename="${front_left_fin_back_mesh_file}">
+      <origin xyz="0.349858 -0.136051 0.006583" rpy="${0.5 * pi} 0 0" />
+    </xacro:fin_macro>
+
+    <!-- OK -->
+    <xacro:fin_macro namespace="${namespace}" fin_id="2" mesh_filename="${front_right_fin_back_mesh_file}">
+      <origin xyz="0.34869 0.137626 0.005034" rpy="${0.5 * pi} 0 0" />
+    </xacro:fin_macro>
+
+    <!--xacro:fin_macro namespace="${namespace}" fin_id="1">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </xacro:fin_macro>
+    <xacro:fin_macro namespace="${namespace}" fin_id="2">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </xacro:fin_macro>
+    <xacro:fin_macro namespace="${namespace}" fin_id="3">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </xacro:fin_macro-->
+
+</robot>

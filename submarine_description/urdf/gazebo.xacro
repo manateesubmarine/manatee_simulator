@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- Center of buoyancy -->
+    <xacro:property name="submarine_cob" value="0 0 0.06"/>
+
+    <!-- Vehicle's actual volume (Gazebo cannot compute the volume out of the mesh) -->
+    <!--xacro:property name="submarine_volume" value="0.030383"/-->
+    <xacro:property name="submarine_volume" value="0.06799987704121499"/>
+
+    <!-- Describing the dimensions of the vehicle's bounding box -->
+    <xacro:property name="submarine_length" value="1.98"/>
+    <xacro:property name="submarine_width"  value="0.23"/>
+    <xacro:property name="submarine_height" value="0.23"/>
+    <xacro:property name="submarine_radius" value="${0.5 * submarine_width}"/>
+
+    <xacro:macro name="submarine_hydro_model" params="namespace">
+      <!-- List of hydrodynamic models this robot's links -->
+      <link name="${namespace}/base_link">
+        <!-- This flag will make the link neutrally buoyant -->
+        <neutrally_buoyant>0</neutrally_buoyant>
+
+        <!-- Link's volume -->
+        <volume>${submarine_volume}</volume>
+
+        <!-- Link's bounding box, it is used to recalculate the immersed
+        volume when close to the surface.
+        This is a workaround the invalid bounding box given by Gazebo-->
+        <box>
+          <width>${submarine_width}</width>
+          <length>${submarine_length}</length>
+          <height>${submarine_height}</height>
+        </box>
+
+        <!-- Center of buoyancy -->
+        <center_of_buoyancy>${submarine_cob}</center_of_buoyancy>
+
+        <!--
+        Choose one of the hydrodynamic models below, all are based on
+        Fossen's equation of motion for underwater vehicles
+
+        Reference:
+        [1] Fossen, Thor I. Handbook of marine craft hydrodynamics and motion
+            control. John Wiley & Sons, 2011.
+        -->
+
+        <!-- 1) Fossen's equation of motion -->
+
+        <hydrodynamic_model>
+              <type>fossen</type>
+              <!-- Added mass: see p.28 in Berg2012 -->
+              <added_mass>
+                4   0   0   0   0   0
+               0   95  0   0   0   0
+               0   0   75  0   0   0
+               0   0   0   0.4 0   0
+               0   0   0   0   27  0
+               0   0   0   0   0   32
+              </added_mass>
+              <!-- Linear damping: see p.31 in Berg2012 -->
+              <linear_damping_forward_speed>
+              -8      0       0       0       0       0
+              0       -162    0       0       0       150
+              0       0       -108    0       -100    0
+              0       0       0       -13     0       0
+              0       0       37      0       -20     0
+              0       -34     0       0       0       -32
+            </linear_damping_forward_speed>
+              <!-- Non-linear damping: see p.30 in Berg2012 -->
+              <!--quadratic_damping>
+                -2.4   0      0      0       0      0
+                0      -80    0      0       0      0.3
+                0      0      -80    0       -0.3   0
+                0      0      0      -0.0006 0      0
+                0      0      1.5    0       -9.1   0
+                0      -1.5   0      0       0      -9.1
+              </quadratic_damping-->
+          </hydrodynamic_model>
+
+
+        <!-- 2) This computes the added-mass and damping parameters for a sphere
+        in the fluid with the given radius -->
+        <!--hydrodynamic_model>
+          <type>sphere</type>
+          <radius>${submarine_radius}</radius>
+        </hydrodynamic_model-->
+
+      </link>
+    </xacro:macro>
+
+</robot>
