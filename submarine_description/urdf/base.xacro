@@ -57,6 +57,7 @@
                  izz="35.0" />
         </inertial>
 
+
         <visual>
           <origin xyz="0 0 0" rpy="0 0 0"/>
           <geometry>
@@ -70,31 +71,21 @@
             <mesh filename="${collision_mesh_file}" scale="1 1 1" />
           </geometry>
         </collision>
-
-        <light type="spot" name="spot">
-          <pose>0 0 0 0 0 0</pose>
-          <diffuse>0 1 0 1</diffuse>
-          <specular>.2 .2 .2 1</specular>
-          <attenuation>
-            <range>10</range>
-            <linear>0.01</linear>
-            <constant>0.2</constant>
-            <quadratic>0.0</quadratic>
-          </attenuation>
-          <direction>0 0 -1</direction>
-          <spot>
-            <inner_angle>0.1</inner_angle>
-            <outer_angle>0.5</outer_angle>
-            <falloff>1.2</falloff>
-          </spot>
-          <cast_shadows>false</cast_shadows>
-        </light>
-
       </link>
 
-    <gazebo reference="${namespace}/base_link">
-      <selfCollide>false</selfCollide>
-    </gazebo>
+      <gazebo reference="${namespace}/base_link">
+        <light name='cylinder/light_source1' type='spot'>
+        </light>
+          <plugin name='light_control' filename='libFlashLightPlugin.so'>
+            <enable>true</enable>
+            <light>
+              <id>cylinder/light_source1</id>
+              <duration>0.5</duration>
+              <interval>0.5</interval>
+            </light>
+         </plugin>
+        <selfCollide>false</selfCollide>
+      </gazebo>
 
     <!-- Set up hydrodynamic plugin given as input parameter -->
     <xacro:insert_block name="gazebo"/>
